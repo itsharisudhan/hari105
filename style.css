@@ -1,59 +1,70 @@
 body {
-    background-color: #f0f8ff; /* Light background color for contrast */
-    font-family: Arial, sans-serif; /* Use a clean font */
+    background-color: #e9ecef; /* Light gray background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    margin: 0; /* Remove default margin */
+    padding: 20px; /* Add padding around the body */
 }
 
-.e1 {
-    color: #007BFF; /* Link color */
-    text-decoration: none; /* Remove underline */
-}
-
-.e1:hover {
-    color: #0056b3; /* Darker shade on hover */
-    text-decoration: underline; /* Underline on hover */
+.header {
+    text-align: center; 
+    margin-bottom: 40px; /* Space below header */
 }
 
 .h1 {
-    text-align: center;
-    color: #333; /* Dark text for contrast */
-    margin-top: 20px; /* Add some space at the top */
+    color: #343a40; /* Dark gray */
+    font-size: 2.5rem; /* Larger heading */
 }
 
 .h2 {
-    text-align: center;
-    color: #555; /* Slightly lighter text */
+    color: #495057; /* Medium gray */
+    font-size: 1.5rem; /* Slightly smaller heading */
 }
 
 .div1 {
-    width: 700px;
-    height: auto;
-    margin: 50px auto;
-    outline: solid 1px #ccc; /* Lighter outline */
-    border-radius: 8px; /* Rounded corners */
-    background-color: #ffffff; /* White background for the table */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    max-width: 800px; /* Max width for better readability */
+    margin: 0 auto; /* Center horizontally */
+    padding: 20px; /* Inner padding */
+    background-color: #ffffff; /* White background for the main content */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Remove double borders */
 }
 
 th {
-    background-color: #007BFF; /* Header background color */
-    color: white; /* Header text color */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* White text for header */
+    padding: 12px; /* Padding for header cells */
 }
 
 td {
-    padding: 10px;
-    text-align: center;
-    background-color: #f9f9f9; /* Light background for table cells */
+    background-color: #f8f9fa; /* Light background for table cells */
+    padding: 10px; /* Padding for data cells */
+    text-align: center; /* Center text */
 }
 
 tr:nth-child(even) td {
-    background-color: #e9ecef; /* Alternate row color */
+    background-color: #e9ecef; /* Light gray for even rows */
 }
 
-tr:hover {
-    background-color: #f1f1f1; /* Highlight row on hover */
+tr:hover td {
+    background-color: #d1ecf1; /* Light blue on hover */
+}
+
+a.e1 {
+    color: #007bff; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+a.e1:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px; /* Space above footer */
+    color: #6c757d; /* Gray text color */
 }
