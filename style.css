@@ -1,31 +1,59 @@
+body {
+    background-color: #f0f8ff; /* Light background color for contrast */
+    font-family: Arial, sans-serif; /* Use a clean font */
+}
+
 .e1 {
-    color: black;
+    color: #007BFF; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.e1:hover {
+    color: #0056b3; /* Darker shade on hover */
+    text-decoration: underline; /* Underline on hover */
 }
 
 .h1 {
     text-align: center;
+    color: #333; /* Dark text for contrast */
+    margin-top: 20px; /* Add some space at the top */
 }
 
 .h2 {
     text-align: center;
+    color: #555; /* Slightly lighter text */
 }
 
 .div1 {
-    width: 700px; /* Increased width */
-    height: auto; /* Changed to auto for dynamic height */
-    margin: 50px auto; /* Centered horizontally */
-    outline: solid 1px black;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Center vertically */
+    width: 700px;
+    height: auto;
+    margin: 50px auto;
+    outline: solid 1px #ccc; /* Lighter outline */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #ffffff; /* White background for the table */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 table {
-    width: 100%; /* Make table take full width of the div */
-    border-collapse: collapse; /* Optional: for better styling */
+    width: 100%;
+    border-collapse: collapse;
 }
 
-th, td {
-    padding: 10px; /* Optional: add some padding for better spacing */
-    text-align: center; /* Center text in table cells */
+th {
+    background-color: #007BFF; /* Header background color */
+    color: white; /* Header text color */
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    background-color: #f9f9f9; /* Light background for table cells */
+}
+
+tr:nth-child(even) td {
+    background-color: #e9ecef; /* Alternate row color */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Highlight row on hover */
 }
