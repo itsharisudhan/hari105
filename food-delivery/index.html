@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Food Delivery</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f7fa, #80deea);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #00796b;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 20px;
+        }
+
+        .item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+        }
+
+        .item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .item h2 {
+            margin: 15px 0 5px;
+            color: #00796b;
+        }
+
+        .price {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #d32f2f;
+            margin: 10px 0;
+        }
+
+        .add-to-cart {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            font-size: 1em;
+        }
+
+        .add-to-cart:hover {
+            background-color: #004d40;
+        }
+
+        .cart {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .cart h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+            color: #00796b;
+        }
+
+        .clear-cart {
+            background-color: #d32f2f;
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            width: 100%;
+            font-size: 1em;
+        }
+
+        .clear-cart:hover {
+            background-color: #b71c1c;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        li {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+
+        #checkout {
+            width: 100%;
+            padding: 10px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #checkout:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #checkout:hover:not(:disabled) {
+            background-color: #115293;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Delicious Food Delivery</h1>
+    </header>
+    
+    <div class="menu">
+        <div class="item">
+            <img src="Burger.png" alt="Burger">
+            <h2>Burger</h2>
+            <p>Spicy burger with all the fixings.</p>
+            <span class="price">₹199</span>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        
+        <div class="item">
+            <img src="pizza.jpg" alt="Pizza">
+            <h2>Pizza</h2>
+            <p>A hot and spicy pizza.</p>
+            <span class="price">₹259</span>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        
+        <div class="item">
+            <img src="Pasta.jpg" alt="Pasta">
+            <h2>Pasta</h2>
+            <p>A hot and spicy pasta.</p>
+            <span class="price">₹199</span>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+        
+        <!-- Add more items here -->
+    </div>
+    
+    <div class="cart">
+        <h2>Cart</h2>
+        <ul id="cart-items"></ul>
+        <h3>Total: ₹<span id="cart-total">0.00</span></h3>
+        <button id="checkout" disabled>Checkout</button>
+        <button class="clear-cart" id="clear-cart">Clear Cart</button>
+    </div>
+    
+    <script>
+        const cartItems = [];
+        const cartTotal = document.getElementById('cart-total');
+        const cartList = document.getElementById('cart-items');
+        const checkoutButton = document.getElementById('checkout');
+        const clearCartButton = document.getElementById('clear-cart');
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const itemDiv = event.target.closest('.item');
+                const title = itemDiv.querySelector('h2').textContent;
+                const price = parseFloat(itemDiv.querySelector('.price').textContent.replace('₹', ''));
+
+                cartItems.push({ title, price });
+                updateCart();
+            });
+        });
+
+        function updateCart() {
+            cartList.innerHTML = '';
+            let total = 0;
+            cartItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.title} - ₹${item.price.toFixed(2)}`;
+                cartList.appendChild(li);
+                total += item.price;
+            });
+
+            cartTotal.textContent = total.toFixed(2);
+            checkoutButton.disabled = cartItems.length === 0;
+        }
+
+        checkoutButton.addEventListener('click', () => {
+            if (cartItems.length > 0) {
+                alert('Proceeding to checkout. Total: ₹' + cartTotal.textContent);
+            }
+        });
+
+        clearCartButton.addEventListener('click', () => {
+            cartItems.length = 0; 
+            updateCart(); 
+        });
+    </script>
+</body>
+</html>
