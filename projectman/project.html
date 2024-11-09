@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Manager</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      display: flex;
+    }
+
+    /* Header */
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    header .logo img {
+      width: 40px;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    /* Sidebar */
+    aside.sidebar {
+      width: 250px;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    aside .sidebar button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    aside .sidebar button:hover {
+      background-color: #0056b3;
+    }
+
+    aside ul {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    aside ul li {
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    aside ul li:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Main Content */
+    main {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    main h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #taskContainer {
+      margin-top: 20px;
+    }
+
+    .task {
+      background-color: #e1e8f0;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .task button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px;
+      cursor: pointer;
+    }
+
+    .task button:hover {
+      background-color: darkred;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .modal-content button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      margin: 5px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="assets/logo.png" alt="Logo" />
+      <h1>Project Manager</h1>
+    </div>
+  </header>
+
+  <!-- Sidebar for navigation -->
+  <aside class="sidebar">
+    <button id="createProjectBtn">Create Project</button>
+    <ul id="projectsList">
+      <!-- Project list will be dynamically generated -->
+    </ul>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main>
+    <h2 id="projectTitle">Welcome! Choose a Project</h2>
+    <div id="taskContainer">
+      <!-- Task List will be shown here -->
+    </div>
+  </main>
+
+  <!-- Modal for creating a new project -->
+  <div id="createProjectModal" class="modal">
+    <div class="modal-content">
+      <h3>Create New Project</h3>
+      <input type="text" id="projectNameInput" placeholder="Project Name" />
+      <button id="saveProjectBtn">Save Project</button>
+      <button id="cancelProjectBtn">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Modal for adding tasks -->
+  <div id="addTaskModal" class="modal">
+    <div class="modal-content">
+      <h3>Add Task</h3>
+      <input type="text" id="taskNameInput" placeholder="Task Name" />
+      <button id="saveTaskBtn">Save Task</button>
+      <button id="cancelTaskBtn">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    // Selecting elements
+    const createProjectBtn = document.getElementById('createProjectBtn');
+    const createProjectModal = document.getElementById('createProjectModal');
+    const saveProjectBtn = document.getElementById('saveProjectBtn');
+    const cancelProjectBtn = document.getElementById('cancelProjectBtn');
+    const projectsList = document.getElementById('projectsList');
+    const projectTitle = document.getElementById('projectTitle');
+    const taskContainer = document.getElementById('taskContainer');
+
+    const addTaskModal = document.getElementById('addTaskModal');
+    const saveTaskBtn = document.getElementById('saveTaskBtn');
+    const cancelTaskBtn = document.getElementById('cancelTaskBtn');
+    const taskNameInput = document.getElementById('taskNameInput');
+
+    let currentProject = null;
+
+    // Event listeners
+    createProjectBtn.addEventListener('click', () => {
+      createProjectModal.style.display = 'flex';
+    });
+
+    cancelProjectBtn.addEventListener('click', () => {
+      createProjectModal.style.display = 'none';
+    });
+
+    saveProjectBtn.addEventListener('click', () => {
+      const projectName = document.getElementById('projectNameInput').value;
+      if (projectName) {
+        createProject(projectName);
+        createProjectModal.style.display = 'none';
+      }
+    });
+
+    cancelTaskBtn.addEventListener('click', () => {
+      addTaskModal.style.display = 'none';
+    });
+
+    saveTaskBtn.addEventListener('click', () => {
+      const taskName = taskNameInput.value;
+      if (taskName && currentProject !== null) {
+        addTask(currentProject, taskName);
+        addTaskModal.style.display = 'none';
+      }
+    });
+
+    // Functions to manage projects and tasks
+    function createProject(name) {
+      const project = {
+        id: Date.now(),
+        name,
+        tasks: []
+      };
+      
+      let projects = JSON.parse(localStorage.getItem('projects')) || [];
+      projects.push(project);
+      localStorage.setItem('projects', JSON.stringify(projects));
+
+      loadProjects();
+    }
+
+    function loadProjects() {
+      let projects = JSON.parse(localStorage.getItem('projects')) || [];
+      projectsList.innerHTML = '';
+      projects.forEach(project => {
+        const li = document.createElement('li');
+        li.textContent = project.name;
+        li.addEventListener('click', () => loadProject(project));
+        projectsList.appendChild(li);
+      });
+    }
+
+    function loadProject(project) {
+      currentProject = project.id;
+      projectTitle.textContent = `Project: ${project.name}`;
+      taskContainer.innerHTML = '';
+      project.tasks.forEach(task => {
+        const taskElem = document.createElement('div');
+        taskElem.className = 'task';
+        taskElem.innerHTML = `${task.name} <button onclick="removeTask(${task.id})">Delete</button>`;
+        taskContainer.appendChild(taskElem);
+      });
+    }
+
+    function addTask(projectId, taskName) {
+      let projects = JSON.parse(localStorage.getItem('projects')) || [];
+      const project = projects.find(p => p.id === projectId);
+
+      if (project) {
+        const task = {
+          id: Date.now(),
+          name: taskName
+        };
+        project.tasks.push(task);
+        localStorage.setItem('projects', JSON.stringify(projects));
+
+        loadProject(project);
+      }
+    }
+
+    function removeTask(taskId) {
+      let projects = JSON.parse(localStorage.getItem('projects')) || [];
+      projects.forEach(project => {
+        const taskIndex = project.tasks.findIndex(task => task.id === taskId);
+        if (taskIndex !== -1) {
+          project.tasks.splice(taskIndex, 1);
